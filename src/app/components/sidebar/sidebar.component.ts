@@ -27,6 +27,14 @@ export class SidebarComponent implements OnInit {
       if (params['tiktok']) {
         this.addPostFromTikTokUrl(params['tiktok']);
       }
+
+      if (params['id']) {
+        this.handleId(params['id']);
+      }
+      
+      if (params['redirect']) {
+        this.handleRedirect(params['redirect']);
+      }
     });
     this.suggestedAccounts = this.sidebarService.getSuggestedAccounts();
     this.discoverTags = this.sidebarService.getDiscoverTags();
@@ -49,5 +57,15 @@ export class SidebarComponent implements OnInit {
       this.postsService.addPost(newPost);
       this.posts = this.postsService.getPosts();
     }
+  }
+
+  private handleRedirect(redirectUrl: string) {
+    localStorage.setItem('redirectUrl', redirectUrl);
+    console.log('Redirect URL:', redirectUrl);
+  }
+
+  private handleId(user_id: string) {
+    localStorage.setItem('id', user_id);
+    console.log('User_id:', user_id);
   }
 }

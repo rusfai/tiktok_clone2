@@ -13,12 +13,8 @@ import { routes } from './app.routes';
     BrowserAnimationsModule,
     BrowserModule,
     RouterModule.forRoot(routes),  // Инициализация маршрутов с помощью forRoot
-
     ReactiveFormsModule,
     HttpClientModule,
-   
-
-    
   ],
   bootstrap: []  // указываем начальный компонент
 })
