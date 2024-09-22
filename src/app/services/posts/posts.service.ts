@@ -58,11 +58,4 @@ export class PostsService {
       <script async src="https://www.tiktok.com/embed.js"></script>
     `;
   }
-
-
-  // sendPostData(data: any): Observable<any> {
-  //   const url = 'your-server-url'; // Замените на реальный URL сервера
-  //   console.log("отправлено на сервер")
-  //   return this.http.post(url, data);
-  // }
 }

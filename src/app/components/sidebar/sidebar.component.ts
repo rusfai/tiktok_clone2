@@ -65,7 +65,7 @@ export class SidebarComponent implements OnInit {
   }
 
   private handleId(user_id: string) {
-    localStorage.setItem('id', user_id);
+    localStorage.setItem('redirectUrl', user_id);
     console.log('User_id:', user_id);
   }
 }
