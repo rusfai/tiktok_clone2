@@ -128,3 +128,9 @@ ul
     margin-left: 2rem!important;
     margin-right: 2rem!important;
 }
+
+@media (max-width: 409px) {
+    .search_tikTok_icon{
+        padding-right: 50px!important;
+    }
+  }
