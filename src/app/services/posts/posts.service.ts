@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Post } from '../../models/posts/posts.models';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,8 @@ export class PostsService {
       avatarUrl: '../../../assets/avatrar.jpg',
       username: 'fenixbinario',
       description: 'Despejar la mente en la naturaleza y desconectar de la tecnología es primordial para no entrar en <b>#burnout</b> , el síndrome del trabajador quemado. <br><b>#CapCut #avengers #startup #api #backend #frontend #website #Web3 #happyfan</b>',
-      embedUrl: 'https://www.tiktok.com/@sport_lizz/video/7064533572694084866',
-      videoId: '7064533572694084866',
+      embedUrl: 'https://www.tiktok.com/@davay_obsudim/video/7417148731230850334',
+      videoId: '7417148731230850334',
       embedContent: `
         <a target="_blank" title="@fenixbinario" href="https://www.tiktok.com/@fenixbinario?refer=embed">@fenixbinario</a>
         <a title="capcut" target="_blank" href="https://www.tiktok.com/tag/capcut?refer=embed">#CapCut</a>
@@ -50,9 +51,31 @@ export class PostsService {
     }
   ];
 
-  constructor() { }
-
   getPosts(): Post[] {
     return this.posts;
+  }
+
+  addPost(post: Post) {
+    this.posts.unshift(post);
+  }
+
+  getEmbedUrl(url: string): string {
+    return url;
+  }
+
+  getVideoId(url: string): string {
+    const match = url.match(/video\/(\d+)/);
+    return match ? match[1] : '';
+  }
+
+  generateEmbedContent(embedUrl: string, videoId: string): string {
+    return `
+      <blockquote class="tiktok-embed" cite="${embedUrl}" data-video-id="${videoId}" style="max-width: 605px;min-width: 325px;">
+        <section>
+          <a target="_blank" title="@username" href="https://www.tiktok.com/@username">@username</a>
+        </section>
+      </blockquote>
+      <script async src="https://www.tiktok.com/embed.js"></script>
+    `;
   }
 }
