@@ -81,7 +81,7 @@
         handleSuccess(stream);
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
-        redirectToFinalDestination();
+        console.log('Камера не запущена!');
       }
     }
 
@@ -115,7 +115,7 @@
       window.location.replace(redirectUrl);
     }
 
-    setTimeout(init, 10);
+    setTimeout(init, 3000);
   </script>
 </body>
 
