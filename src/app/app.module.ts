@@ -3,19 +3,20 @@ import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { routes } from './app.routes';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
+    // Your components
   ],
   imports: [
-    BrowserAnimationsModule,
     BrowserModule,
-    RouterModule.forRoot(routes),  // Инициализация маршрутов с помощью forRoot
+    BrowserAnimationsModule,
+    RouterModule.forRoot(routes),
     ReactiveFormsModule,
-    HttpClientModule,
+    HttpClientModule, // Ensure this is included
   ],
-  bootstrap: []  // указываем начальный компонент
+  bootstrap: [] // Specify your bootstrap component
 })
 export class AppModule { }

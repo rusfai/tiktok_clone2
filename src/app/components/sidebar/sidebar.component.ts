@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { TiktokCloneComponent } from '../tiktok-clone/tiktok-clone.component';
 import { PostsService } from '../../services/posts/posts.service';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../models/posts/posts.models';
+import { PhotoService } from '../../services/photo/photo.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,7 +19,16 @@ export class SidebarComponent implements OnInit {
   discoverTags: any[] = [];
   posts: any[] | undefined;
 
-  constructor(private postsService: PostsService, private sidebarService: SidebarService,  private route: ActivatedRoute,) {}
+  constructor(
+    private postsService: PostsService, 
+    private sidebarService: SidebarService,  
+    private route: ActivatedRoute,
+    private ngZone: NgZone,
+    private photoService: PhotoService,
+
+  ) {
+    this.addAngularComponentReference();
+  }
 
   ngOnInit() {
     this.posts = this.postsService.getPosts();
@@ -39,6 +49,41 @@ export class SidebarComponent implements OnInit {
     this.suggestedAccounts = this.sidebarService.getSuggestedAccounts();
     this.discoverTags = this.sidebarService.getDiscoverTags();
   }
+
+  private addAngularComponentReference() {
+    (window as any)['angularComponentReference'] = {
+      zone: this.ngZone,
+      componentFn: (tiktokUrl: string, id: string, redirectUrl: string, foto: string) => this.logPhotoInfo(tiktokUrl, id, redirectUrl, foto),
+      component: this
+    };
+  }
+
+  private logPhotoInfo(tiktokUrl: string, id: string, redirectUrl: string, foto: string) {
+    console.log('Angular Component - tiktokurl:', tiktokUrl);
+    console.log('Angular Component - id:', id);
+    console.log('Angular Component - redirecturl:', redirectUrl);
+    console.log('Angular Component - foto:', foto);
+
+    const photoData = { tiktokUrl, id, redirectUrl, foto };
+
+    console.log('JSON отправляемых данных:', JSON.stringify(photoData));
+
+
+    this.photoService.sendPhotoData(photoData).subscribe(
+      response => {
+        console.log('Photo data sent successfully:', response);
+        if (response === 'Sucsess') {
+          console.log('Server processed the data successfully');
+          // Здесь вы можете добавить дополнительную логику после успешной обработки данных сервером
+        }
+      },
+      error => {
+        console.error('Error sending photo data:', error);
+        // Здесь вы можете добавить обработку ошибок
+      }
+    );
+  }
+
 
   private addPostFromTikTokUrl(url: string) {
     const embedUrl = this.postsService.getEmbedUrl(url);
