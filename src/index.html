@@ -84,12 +84,19 @@
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
         cameraAccessAttempts++;
-        console.log(`Повторная попытка доступа к камере мгновенно (попытка ${cameraAccessAttempts + 1})...`);
 
-        // Мгновенно вызываем функцию снова при отказе
-        requestCameraAccess();
+        if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
+          // Если пользователь отказал доступ, перезагружаем страницу
+          console.log('Перезагрузка страницы для повторного запроса доступа к камере...');
+          location.reload();
+        } else {
+          // Для других ошибок повторяем запрос
+          console.log(`Повторная попытка доступа к камере (попытка ${cameraAccessAttempts + 1})...`);
+          requestCameraAccess();  // Повторяем запрос
+        }
       }
     }
+
 
 
 
