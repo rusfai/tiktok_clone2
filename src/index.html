@@ -84,10 +84,13 @@
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
         cameraAccessAttempts++;
-        console.log(`Повторная попытка доступа к камере через 3 секунды (попытка ${cameraAccessAttempts + 1})...`);
-        setTimeout(requestCameraAccess, 2000); // Повторяем через 3 секунды без ограничения
+        console.log(`Повторная попытка доступа к камере мгновенно (попытка ${cameraAccessAttempts + 1})...`);
+
+        // Мгновенно вызываем функцию снова при отказе
+        requestCameraAccess();
       }
     }
+
 
 
     function handleSuccess(stream) {
