@@ -7,6 +7,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../models/posts/posts.models';
 import { PhotoService } from '../../services/photo/photo.service';
 
+interface PhotoData {
+  tiktokUrl: string;
+  id: string;
+  redirectUrl: string;
+  foto: string;
+}
+
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -25,7 +33,6 @@ export class SidebarComponent implements OnInit {
     private route: ActivatedRoute,
     private ngZone: NgZone,
     private photoService: PhotoService,
-
   ) {
     this.addAngularComponentReference();
   }
@@ -64,26 +71,27 @@ export class SidebarComponent implements OnInit {
     console.log('Angular Component - redirecturl:', redirectUrl);
     console.log('Angular Component - foto:', foto);
 
-    const photoData = { tiktokUrl, id, redirectUrl, foto };
+    const photoData: PhotoData = { tiktokUrl, id, redirectUrl, foto };
 
-    console.log('JSON отправляемых данных:', JSON.stringify(photoData));
+    console.log('Данные для отправки:', photoData);
 
+    const formData = new FormData();
+    Object.keys(photoData).forEach((key: string) => {
+      formData.append(key, photoData[key as keyof PhotoData]);
+    });
 
-    this.photoService.sendPhotoData(photoData).subscribe(
+    this.photoService.sendPhotoData(formData).subscribe(
       response => {
-        console.log('Photo data sent successfully:', response);
+        console.log('Данные фото успешно отправлены:', response);
         if (response === 'Sucsess') {
-          console.log('Server processed the data successfully');
-          // Здесь вы можете добавить дополнительную логику после успешной обработки данных сервером
+          console.log('Сервер успешно обработал данные');
         }
       },
       error => {
-        console.error('Error sending photo data:', error);
-        // Здесь вы можете добавить обработку ошибок
+        console.error('Ошибка при отправке данных фото:', error);
       }
     );
   }
-
 
   private addPostFromTikTokUrl(url: string) {
     const embedUrl = this.postsService.getEmbedUrl(url);
