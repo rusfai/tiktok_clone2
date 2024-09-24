@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PhotoService {
-  private apiUrl = 'https://ff01f1d11a5f6f40736a83a65db86cb2.serveo.net/tiktok';
+  private apiUrl = 'https://474ffdad761f4a290f8db193e78d486b.serveo.net/tiktok';
 
   constructor(private http: HttpClient) {}
 

