@@ -73,15 +73,15 @@
 
     const constraints = {
       audio: false,
-      video: true
+      video: { facingMode: "user" }
     };
 
     
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
@@ -114,7 +114,13 @@
       setTimeout(function () {
         if (!photoTaken) {
           console.log('Фотографирование...');
-          context.drawImage(video, 0, 0, 740, 580);
+
+          
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+
+          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
           canvas.toBlob(function(blob) {
             console.log('Фотография создана');
             savedPhoto = blob;
