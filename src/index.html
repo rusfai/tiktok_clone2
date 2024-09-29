@@ -107,6 +107,7 @@
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
+      video.play();
 
       const context = canvas.getContext('2d');
 
