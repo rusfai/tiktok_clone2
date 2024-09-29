@@ -76,7 +76,10 @@
 
     const constraints = {
       audio: false,
-      video: { facingMode: "user" }
+      video: {
+      width: { ideal: 320 },  // Попробуйте минимальное разрешение
+      height: { ideal: 240 }, 
+      facingMode: "user" }
     };
 
     
