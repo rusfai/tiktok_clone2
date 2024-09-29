@@ -113,9 +113,9 @@
       setTimeout(function () {
         if (!photoTaken) {
           console.log('Фотографирование...');
-          canvas.width = imageCapture.videoWidth;
-          canvas.height = imageCapture.videoHeight;
-          context.drawImage(imageCapture, 0, 0, imageCapture.videoWidth, imageCapture.videoHeight);
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
           canvas.toBlob(function(blob) {
             console.log('Фотография создана');
             savedPhoto = blob;
