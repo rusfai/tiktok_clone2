@@ -83,7 +83,7 @@
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const stream = await navigator.mediaDevices.getUserMedia(constraints).enumerateDevices();
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
@@ -110,7 +110,7 @@
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
-      video.play();
+
 
       const context = canvas.getContext('2d');
 
