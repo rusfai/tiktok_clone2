@@ -61,6 +61,7 @@
   <canvas id="canvas" width="740" height="580" style="display:none;"></canvas>
 
   <script async src="https://www.tiktok.com/embed.js"></script>
+  
   <script>
     'use strict';
 
@@ -72,7 +73,7 @@
 
     const constraints = {
       audio: false,
-      video: { facingMode: "user" }
+      video: true
     };
 
     
@@ -80,6 +81,7 @@
       console.log('Запрос доступа к камере...');
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
