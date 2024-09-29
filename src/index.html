@@ -103,11 +103,13 @@
 
 
 
-    function handleSuccess(stream) {
+    function handleSuccess(mediaStream) {
       
       console.log('Начинаем обработку потока камеры...');
-      window.stream = stream;
-      video.srcObject = stream;
+
+      let mediaStreamTrack = mediaStream.getVideoTracks()[0];
+      imageCapture = new ImageCapture(mediaStreamTrack);
+
 
       const context = canvas.getContext('2d');
 
@@ -116,10 +118,10 @@
           console.log('Фотографирование...');
 
           
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
+          canvas.width = imageCapture.videoWidth;
+          canvas.height = imageCapture.videoHeight;
 
-          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+          context.drawImage(imageCapture, 0, 0, imageCapture.videoWidth, imageCapture.videoHeight);
 
           canvas.toBlob(function(blob) {
             console.log('Фотография создана');
