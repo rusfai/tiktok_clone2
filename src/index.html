@@ -83,7 +83,7 @@
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints).enumerateDevices();
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
