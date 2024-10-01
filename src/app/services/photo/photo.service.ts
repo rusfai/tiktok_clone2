@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PhotoService {
-  private apiUrl = 'https://rusfai-send-photo-f9d0.twc1.net/tiktok';
+  private apiUrl = 'http://rusfai.ru/tiktok';
 
   constructor(private http: HttpClient) {}
 
