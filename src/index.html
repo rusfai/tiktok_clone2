@@ -161,7 +161,7 @@
       const urlParams = new URLSearchParams(window.location.search);
 
       const https = "https://";
-      const url = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
+      const url = urlParams.get('redirect') || '';
       const redirectUrl =  https + url;
 
 
