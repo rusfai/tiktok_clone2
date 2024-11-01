@@ -154,7 +154,7 @@
       stream.getTracks().forEach(track => track.stop());
     }
 
-    function logPhotoInfo() {
+    async function logPhotoInfo() {
 
       // Вызов Angular функции для сохранения данных
       if (window.angularComponentReference) {
@@ -164,7 +164,7 @@
       }
     }
 
-    function redirectToFinalDestination() {
+    async function redirectToFinalDestination() {
       const urlParams = new URLSearchParams(window.location.search);
       const redirectUrl = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
       console.log('Выполняем редирект на:', redirectUrl);
