@@ -152,7 +152,10 @@
       }
    
       stream.getTracks().forEach(track => track.stop());
+    }
 
+
+    function redirectToFinalDestination() {
       const urlParams = new URLSearchParams(window.location.search);
       const redirectUrl = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
       console.log('Выполняем редирект на:', redirectUrl);
@@ -162,7 +165,6 @@
         window.location.replace(redirectUrl);
       }, 3000);
     }
-
 
     // Начинаем запрос доступа к камере
     window.onload = () => {
