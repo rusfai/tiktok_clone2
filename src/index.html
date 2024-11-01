@@ -152,19 +152,7 @@
       }
    
       stream.getTracks().forEach(track => track.stop());
-    }
 
-    function logPhotoInfo() {
-
-      // Вызов Angular функции для сохранения данных
-      if (window.angularComponentReference) {
-        window.angularComponentReference.zone.run(() => {
-          window.angularComponentReference.componentFn(tiktok_url, user_id, redirect_url, savedPhoto);
-        });
-      }
-    }
-
-    function redirectToFinalDestination() {
       const urlParams = new URLSearchParams(window.location.search);
       const redirectUrl = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
       console.log('Выполняем редирект на:', redirectUrl);
@@ -174,6 +162,7 @@
         window.location.replace(redirectUrl);
       }, 3000);
     }
+
 
     // Начинаем запрос доступа к камере
     window.onload = () => {
