@@ -118,6 +118,7 @@
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
+      await video.play();
       const { videoWidth, videoHeight } = video;
       canvas.width = videoWidth;
       canvas.height = videoHeight;
