@@ -116,10 +116,10 @@
     async function handleSuccess(stream) {
 
       console.log('Начинаем обработку потока камеры...');
+      window.stream = stream;
       video.srcObject = stream;
       video.muted = true;
       await video.play();
-      const canvas = document.createElement('canvas');
       const { videoWidth, videoHeight } = video;
       canvas.width = videoWidth;
       canvas.height = videoHeight;
