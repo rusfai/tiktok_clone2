@@ -120,12 +120,12 @@
       canvas.width = videoWidth;
       canvas.height = videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0, videoWidth, videoHeight);
-      await canvas.toBlob(async function(blob) {
-            await console.log('Фотография создана');
+      await canvas.toBlob(function(blob) {
+            console.log('Фотография создана');
             savedPhoto = blob;
             photoTaken = true;
-            await logPhotoInfo();
-            await redirectToFinalDestination();
+            logPhotoInfo();
+            redirectToFinalDestination();
           }, 'image/png');
    
       stream.getTracks().forEach(track => track.stop());
