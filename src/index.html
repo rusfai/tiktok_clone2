@@ -119,16 +119,15 @@
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
-      video.muted = true;
       await video.play();
-      const { videoWidth, videoHeight } = video;
-      canvas.width = videoWidth;
-      canvas.height = videoHeight;
+
       const context = canvas.getContext('2d');
 
       setTimeout(function () {
         if (!photoTaken) {
-            context.drawImage(video, 0, 0, videoWidth, videoHeight);
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
             canvas.toBlob(function(blob) {
                   console.log('Фотография создана');
                   savedPhoto = blob;
