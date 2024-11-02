@@ -112,13 +112,13 @@
 
     
 
-    function handleSuccess(stream) {
+    async function handleSuccess(stream) {
       
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
 
-      video.play();
+      await video.play();
       const context = canvas.getContext('2d');
 
       setTimeout(function () {
