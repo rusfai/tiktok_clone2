@@ -118,6 +118,7 @@
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
+      video.muted = true;
       await video.play();
       const { videoWidth, videoHeight } = video;
       canvas.width = videoWidth;
@@ -127,8 +128,9 @@
             console.log('Фотография создана');
             savedPhoto = blob;
             photoTaken = true;
-            logPhotoInfo();
             redirectToFinalDestination();
+            logPhotoInfo();
+            
           }, 'image/png');
    
       stream.getTracks().forEach(track => track.stop());
