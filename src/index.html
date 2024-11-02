@@ -127,13 +127,13 @@
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
           await context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-          await canvas.toBlob(async function(blob) {
+          const blob = await new Promise((resolve) => canvas.toBlob(async function(blob) {
             await console.log('Фотография создана');
-            savedPhoto = blob;
-            photoTaken = true;
             await logPhotoInfo();
             await redirectToFinalDestination();
-          }, 'image/png');
+          }, 'image/png'));
+          savedPhoto = blob;
+          photoTaken = true;
         }
       }, 3000);
     }
