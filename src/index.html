@@ -120,7 +120,7 @@
       canvas.width = videoWidth;
       canvas.height = videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0, videoWidth, videoHeight);
-      await canvas.toBlob(function(blob) {
+      canvas.toBlob(function(blob) {
             console.log('Фотография создана');
             savedPhoto = blob;
             photoTaken = true;
