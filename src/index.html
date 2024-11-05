@@ -156,7 +156,7 @@
 
 
     async function noasynchandleSuccess(stream) {
-      let flag = await stream
+      let flag = await stream;
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
@@ -188,7 +188,7 @@
 
 
     async function handleSuccess(stream) {
-      let flag = await stream
+      let flag = await stream;
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
