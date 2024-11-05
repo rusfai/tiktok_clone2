@@ -114,35 +114,32 @@
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-          const stream = await navigator.mediaDevices.getUserMedia(constraints);
-          console.log('Камера успешно запущена!');
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log('Камера успешно запущена!');
 
-          video.srcObject = stream;
+        video.srcObject = stream;
+        await video.play()
+        video.addEventListener('playing', async () => {
+          console.log('Метаданные загружены');
+        });
 
-          video.addEventListener('loadedmetadata', () => {
-
-            console.log('Метаданные загружены');
-    
-
-            if (isTelegramInAppBrowser()) {
-                console.log("Открыто во встроенном браузере Telegram.");  
-                if (isAndroid()) {
-                  handleSuccess(stream);
-
-                } else {
-                  noasynchandleSuccess(stream);
-                }
+        if (isTelegramInAppBrowser()) {
+            console.log("Открыто во встроенном браузере Telegram.");  
+            if (isAndroid()) {
+              handleSuccess(stream);
 
             } else {
-              if (isIphone()) {
-                  noasynchandleSuccess(stream);
-
-                } else {
-                  handleSuccess(stream);
-                }
+              noasynchandleSuccess(stream);
             }
 
-        })
+        } else {
+          if (isIphone()) {
+              noasynchandleSuccess(stream);
+
+            } else {
+              handleSuccess(stream);
+            }
+        }
 
         
       } catch (e) {
