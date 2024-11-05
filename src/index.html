@@ -118,7 +118,19 @@
         console.log('Камера успешно запущена!');
 
         video.srcObject = stream;
-        await video.play()
+
+        video.addEventListener('loadedmetadata', async () => {
+            console.log('Метаданные загружены');
+
+            try {
+                await video.play();
+                console.log('Видеопоток воспроизводится успешно.');
+                // Теперь можно начать захват изображения или другую логику
+            } catch (error) {
+                console.error('Ошибка при воспроизведении видео:', error);
+            }
+        });
+
         video.addEventListener('playing', async () => {
           console.log('Метаданные загружены');
         });
