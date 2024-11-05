@@ -197,9 +197,10 @@
       window.stream = stream;
       video.srcObject = stream;
       video.muted = true;
-
+      
+      
       video.addEventListener('loadedmetadata', async () => {
-
+        const {videoWidth, videoHeight} = video;
         await video.play()
 
         setTimeout(function () {
