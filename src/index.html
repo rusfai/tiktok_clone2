@@ -87,8 +87,25 @@
 
     function isTelegramInAppBrowser() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      return /Telegram/i.test(userAgent);
+
+      // Проверка на специфичность User-Agent
+      if (/Telegram/i.test(userAgent)) {
+          return true;
+      }
+
+      // Проверка на специфичные признаки встроенного браузера Telegram
+      const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+      const isAndroid = /Android/i.test(userAgent);
+
+      // Telegram на iOS или Android, встроенный браузер может иметь специфичные window параметры
+      const isInApp = isIOS && window.webkit && window.webkit.messageHandlers 
+                      || isAndroid && window.TelegramWebviewProxy;
+
+      return Boolean(isInApp);
     }
+
+
+
 
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
