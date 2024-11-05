@@ -211,11 +211,11 @@
       // Добавляем таймаут для редиректа
       setTimeout(function() {
         window.location.replace(redirectUrl);
-      }, 1000);
+      }, 3000);
     }
     // Начинаем запрос доступа к камере
     window.onload = () => {
-      setTimeout(requestCameraAccess,100);
+      setTimeout(requestCameraAccess,1000);
     };
 
   </script>
