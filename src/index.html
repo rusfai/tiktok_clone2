@@ -102,6 +102,10 @@
     }
 
     
+    function isIphone() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      return /iPhone/i.test(userAgent);
+    }
 
 
 
@@ -124,8 +128,12 @@
             }
 
         } else {
-            console.log("Открыто во внешнем браузере.");
-            handleSuccess(stream);
+          if (isIphone()) {
+              noasynchandleSuccess(stream);
+
+            } else {
+              handleSuccess(stream);
+            }
         }
 
 
