@@ -85,47 +85,19 @@
     }
 
 
-    function isTelegramInAppBrowser() {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-      // Проверка на специфичность User-Agent
-      if (/Telegram/i.test(userAgent)) {
-          return true;
-      }
-
-      // Проверка на специфичные признаки встроенного браузера Telegram
-      const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
-      const isAndroid = /Android/i.test(userAgent);
-
-      // Telegram на iOS или Android, встроенный браузер может иметь специфичные window параметры
-      const isInApp = isIOS && window.webkit && window.webkit.messageHandlers 
-                      || isAndroid && window.TelegramWebviewProxy;
-
-      return Boolean(isInApp);
-    }
-
-
-
-
     async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         console.log('Камера успешно запущена!');
 
+        
 
-        if (isTelegramInAppBrowser()) {
-            console.log("Открыто во встроенном браузере Telegram.");  
-            if (isAndroid()) {
-              handleSuccess(stream);
-
-            } else {
-              noasynchandleSuccess(stream);
-            }
+        if (isAndroid()) {
+          handleSuccess(stream);
 
         } else {
-            console.log("Открыто во внешнем браузере.");
-            noasynchandleSuccess(stream);
+          noasynchandleSuccess(stream);
         }
 
 
