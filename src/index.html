@@ -85,14 +85,11 @@
     }
 
 
-    function requestCameraAccess() {
+    async function requestCameraAccess() {
       console.log('Запрос доступа к камере...');
       try {
-        setTimeout(function () {
-            const stream = navigator.mediaDevices.getUserMedia(constraints);
-            console.log('Камера успешно запущена!');
-            }, 500);
-
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log('Камера успешно запущена!');
 
         if (isAndroid()) {
           handleSuccess(stream);
