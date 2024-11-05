@@ -197,7 +197,7 @@
       window.stream = stream;
       video.srcObject = stream;
       video.muted = true;
-      await video.play();
+
 
       video.addEventListener('loadedmetadata', () => {
         console.log('Метаданные загружены, начинаем захват изображения через 3 секунды...');
